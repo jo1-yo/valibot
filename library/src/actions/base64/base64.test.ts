@@ -85,6 +85,13 @@ describe('base64', () => {
         '8J+Mrg==', // '🌮'
       ]);
     });
+
+    test('for large Base64 strings', () => {
+      // Regression: the previous regex used a repeated group that overflowed
+      // V8's backtracking stack on strings larger than ~8 MB (#1732)
+      const large = 'AAAA'.repeat(2 * 1024 * 1024);
+      expectNoActionIssue(action, [large]);
+    });
   });
 
   describe('should return dataset with issues', () => {

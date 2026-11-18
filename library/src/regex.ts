@@ -1,8 +1,14 @@
 /**
  * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
+ *
+ * Hint: The length divisibility check (`value.length % 4 === 0`) is enforced
+ * separately in the action's `~run` method. This avoids a repeated group
+ * (`(?:…{4})*`) that overflows V8's backtracking stack on large strings.
+ *
+ * Hint: We decided against the `i` flag to avoid matching non-ASCII characters
+ * (U+017F, U+212A) through Unicode case folding.
  */
-export const BASE64_REGEX: RegExp =
-  /^(?:[\da-z+/]{4})*(?:[\da-z+/]{2}==|[\da-z+/]{3}=)?$/iu;
+export const BASE64_REGEX: RegExp = /^[\dA-Za-z+/]*={0,2}$/u;
 
 /**
  * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.

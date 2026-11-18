@@ -96,7 +96,11 @@ export function base64(
     requirement: BASE64_REGEX,
     message,
     '~run'(dataset, config) {
-      if (dataset.typed && !this.requirement.test(dataset.value)) {
+      if (
+        dataset.typed &&
+        (dataset.value.length % 4 !== 0 ||
+          !this.requirement.test(dataset.value))
+      ) {
         _addIssue(this, 'Base64', dataset, config);
       }
       return dataset;
